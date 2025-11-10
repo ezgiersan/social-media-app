@@ -117,7 +117,7 @@ export default function Register() {
             </View>
 
             <Pressable style={styles.button} onPress={handleSubmit as any}>
-              <Text style={styles.buttonText}>SIGN UP</Text>
+              <Text style={styles.buttonText}>Sign Up</Text>
             </Pressable>
             <View style={styles.signUpContainer}>
               <Text>Already have an account? </Text>

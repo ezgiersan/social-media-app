@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressBar from "../../components/ui/ProgressBar";
 import { AppDispatch, RootState } from "../../store";
-import { sharePost } from "../../store/slices/createPost";
+import { sharePost, reset } from "../../store/slices/createPost";
 
 
 export default function Post() {
@@ -27,20 +27,20 @@ export default function Post() {
     (state: RootState) => state.post
   );
 
-  useEffect(() => {
-    if (success) {
-      setLoading(false);
-      router.replace("/");
-      removeImage();
-    } 
-  }, [success]);
+  // useEffect(() => {
+  //   if (success) {
+  //     setLoading(false);
+  //     router.replace("/");
+  //     removeImage();
+  //   } 
+  // }, [success]);
 
-  useEffect(() => {
-    if (error) {
-      showToast("error", "Something Went Wrong!")
-      setLoading(false);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     showToast("error", "Something Went Wrong!")
+  //     setLoading(false);
+  //   }
+  // }, [error]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -56,6 +56,8 @@ export default function Post() {
 
   const submitPost = async () => {
     setLoading(true);
+    dispatch(reset());
+
     const userId = await getUserId();
 
     const formData = new FormData();
@@ -69,7 +71,20 @@ export default function Post() {
 
     formData.append("userId", userId ?? "");
 
-    dispatch(sharePost(formData));
+    // dispatch(sharePost(formData));
+
+
+  try {
+    const result = await dispatch(sharePost(formData)).unwrap();
+    showToast("success", "Post shared successfully!");
+    removeImage();
+    router.replace("/"); 
+  } catch (err: any) {
+    showToast("error", err || "Something went wrong!");
+  } finally {
+    setLoading(false);
+  }
+
   };
 
   const removeImage = () => setImage(null);
