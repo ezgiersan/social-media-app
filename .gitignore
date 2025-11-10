@@ -1,0 +1,17 @@
+# Node
+node_modules/
+
+# Env
+.env
+.env.*
+
+# Output / Build
+dist/
+build/
+out/
+.expo/
+
+# System / IDE
+.DS_Store
+.vscode/
+.idea/
